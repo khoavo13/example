@@ -1,7 +1,6 @@
 .product-item{
     display: flex !important;
     justify-content: space-between;
-    text-align: center;
     padding: 10px 20px;
 }
 .product-item .product-name{
@@ -9,4 +8,8 @@
     text-align: left;
     color: blue;
     margin: 0 20px;
+}
+
+.product-item .product-name.active{
+    text-decoration: line-through;
 }
