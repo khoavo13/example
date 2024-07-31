@@ -1,14 +1,20 @@
 import { createSlice } from "@reduxjs/toolkit";
-const initialState = {
-  productList: [
-    { id: 1, name: "Le Tho", checked: false },
-    { id: 2, name: "Le Meo", checked: false },
-    { id: 3, name: "Le Nai", checked: false },
-    { id: 4, name: "Le Gau", checked: false },
-  ],
-  flagFilter: "",
-  checkedAll: false,
-};
+let initialState={}
+if (localStorage.getItem("product")){
+  initialState = JSON.parse(localStorage.getItem("product"))
+}
+else {
+  initialState = {
+    productList: [
+      { id: 1, name: "Le Tho", checked: false },
+      { id: 2, name: "Le Meo", checked: false },
+      { id: 3, name: "Le Nai", checked: false },
+      { id: 4, name: "Le Gau", checked: false },
+    ],
+    flagFilter: "",
+    checkedAll: false,
+  };
+}
 const productSlice = createSlice({
   name: "product",
   initialState,
@@ -17,11 +23,13 @@ const productSlice = createSlice({
       state.productList = state.productList.map((item) => 
         item.id == action.payload ? { ...item, checked: !item.checked } : item
       )
+      localStorage.setItem("product", JSON.stringify(state))
     },
     deleteProduct(state, action) {
       state.productList = state.productList.filter(
         (item) => item.id !== action.payload
       );
+      localStorage.setItem("product", JSON.stringify(state))
     },
     addNewProduct(state, action) {
       let maxId = state.productList.reduce(
@@ -36,6 +44,7 @@ const productSlice = createSlice({
           checked: false,
         },
       ];
+      localStorage.setItem("product", JSON.stringify(state))
     },
     rename(state, action) {
       state.productList = state.productList.map((item) =>
@@ -43,12 +52,14 @@ const productSlice = createSlice({
           ? { ...item, name: action.payload.name }
           : item
       );
+      localStorage.setItem("product", JSON.stringify(state))
     },
     deleteCheckedAll(state) {
       state.productList = state.productList.filter((item) => !item.checked);
       if (state.productList.length < 1) {
         state.checkedAll = false;
       }
+      localStorage.setItem("product", JSON.stringify(state))
     },
     isCheckedAll(state) {
       let noCheckedAll = false;
@@ -60,9 +71,11 @@ const productSlice = createSlice({
       });
 
       state.checkedAll = noCheckedAll;
+      localStorage.setItem("product", JSON.stringify(state))
     },
     setFlagFilter(state, action) {
       state.flagFilter = action.payload;
+      localStorage.setItem("product", JSON.stringify(state))
     },
     setCheckedAll(state, action) {
       state.checkedAll = action.payload;
@@ -73,6 +86,8 @@ const productSlice = createSlice({
           ...item,
           checked: state.checkedAll,
         }));
+
+        localStorage.setItem("product", JSON.stringify(state))
     },
   },
 });
